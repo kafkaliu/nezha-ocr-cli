@@ -1,0 +1,51 @@
+{
+  "name": "nezha-ocr-cli",
+  "version": "0.1.0",
+  "description": "CLI tool to convert PDF to JSON-AST using PaddleOCR API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "nezha-ocr": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "start": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:fixtures": "tsx tests/fixtures/test-pdf.ts test-standard-4pages.pdf 4",
+    "clean": "rm -rf dist test-data/*.pdf"
+  },
+  "keywords": [
+    "ocr",
+    "pdf",
+    "paddleocr",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "axios": "^1.6.7",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@vitest/coverage-v8": "^2.0.0",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.1",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
