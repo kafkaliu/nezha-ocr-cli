@@ -33,6 +33,14 @@
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kafkaliu/nezha-ocr-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kafkaliu/nezha-ocr-cli/issues"
+  },
+  "homepage": "https://github.com/kafkaliu/nezha-ocr-cli#readme",
   "dependencies": {
     "commander": "^12.0.0",
     "axios": "^1.6.7",
