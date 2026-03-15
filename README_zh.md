@@ -14,7 +14,7 @@
 ## 安装
 
 ```bash
-npm install -g nezha-ocr-cli
+npm install -g @kafkaliu/nezha-ocr-cli
 ```
 
 安装后使用 `nezha-ocr` 命令运行。
@@ -22,7 +22,7 @@ npm install -g nezha-ocr-cli
 或直接使用 npx（无需安装）：
 
 ```bash
-npx nezha-ocr-cli input.pdf
+npx @kafkaliu/nezha-ocr-cli input.pdf
 ```
 
 ## 使用方法

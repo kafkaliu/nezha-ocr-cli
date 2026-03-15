@@ -14,7 +14,7 @@ A CLI tool to convert PDF documents to JSON-AST format using PaddleOCR API.
 ## Installation
 
 ```bash
-npm install -g nezha-ocr-cli
+npm install -g @kafkaliu/nezha-ocr-cli
 ```
 
 After installation, use the `nezha-ocr` command to run.
@@ -22,7 +22,7 @@ After installation, use the `nezha-ocr` command to run.
 Or use npx directly (no installation required):
 
 ```bash
-npx nezha-ocr-cli input.pdf
+npx @kafkaliu/nezha-ocr-cli input.pdf
 ```
 
 ## Usage
