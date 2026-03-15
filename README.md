@@ -157,6 +157,21 @@ npm run test:fixtures
 
 This generates a test PDF file in the `test-data/` directory.
 
+### Publishing
+
+```bash
+# Update version and create tag (automatically updates package.json)
+npm version patch   # 0.1.0 → 0.1.1 (bug fixes)
+npm version minor   # 0.1.0 → 0.2.0 (new features)
+npm version major   # 0.1.0 → 1.0.0 (breaking changes)
+
+# Push code and tag
+git push
+git push origin v0.1.1
+```
+
+After pushing the tag, GitHub Actions will automatically run tests, build, and publish to npm.
+
 ## Project Structure
 
 ```

@@ -157,6 +157,21 @@ npm run test:fixtures
 
 这会在 `test-data/` 目录下生成测试 PDF 文件。
 
+### 发布新版本
+
+```bash
+# 更新版本号并创建 tag（自动更新 package.json）
+npm version patch   # 0.1.0 → 0.1.1（修复 bug）
+npm version minor   # 0.1.0 → 0.2.0（新功能）
+npm version major   # 0.1.0 → 1.0.0（破坏性变更）
+
+# 推送代码和 tag
+git push
+git push origin v0.1.1
+```
+
+推送 tag 后，GitHub Actions 会自动运行测试、构建并发布到 npm。
+
 ## 项目结构
 
 ```
