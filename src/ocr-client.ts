@@ -25,7 +25,7 @@ export async function callOcrApi(
         Authorization: `token ${options.token}`,
         'Content-Type': 'application/json',
       },
-      timeout: 120000, // 2 minutes timeout
+      timeout: 600000, // 10 minutes timeout
     });
 
     if (response.status !== 200) {

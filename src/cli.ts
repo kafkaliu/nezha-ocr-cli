@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import fs from 'fs';
+import { PDFDocument } from 'pdf-lib';
 import { splitPdf } from './pdf-splitter.js';
 import { callOcrApi } from './ocr-client.js';
 import { mergeOcrResults } from './result-merger.js';
@@ -18,7 +19,7 @@ program
   .option('-t, --token <token>', 'PaddleOCR API token', process.env.OCR_API_TOKEN)
   .option('-o, --output <file>', 'Output file name (if not specified, prints to stdout)')
   .option('-f, --format <format>', 'Output format (json)', 'json')
-  .option('-m, --max-pages <number>', 'Maximum pages per API call', '100')
+  .option('-m, --max-pages <number>', 'Maximum pages per API call', '50')
   .option('--file-type <type>', 'File type (0 for PDF, 1 for images)', '0')
   .option('--use-doc-orientation-classify', 'Use document orientation classification')
   .option('--use-doc-unwarping', 'Use document unwarping')
@@ -58,15 +59,45 @@ program
       };
 
       // Process the PDF
-      // Note: The PaddleOCR API can handle multi-page PDFs directly,
-      // so we send the entire PDF at once instead of splitting it.
-      // This is more reliable as splitting may cause issues with the API.
+      // The PaddleOCR API has a page limit (typically 100 pages per request).
+      // For PDFs exceeding this limit, we split and process in chunks.
       console.error(`Processing PDF (size: ${(pdfBytes.length / 1024 / 1024).toFixed(2)} MB)...`);
 
-      const result = await callOcrApi(pdfBytes, ocrOptions);
+      let mergedResult;
+      const splitThreshold = parseInt(options.maxPages, 10);
 
-      // Since we processed the entire PDF at once, we don't need to merge results
-      const mergedResult = result;
+      // Check if PDF needs to be split
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const totalPages = pdfDoc.getPageCount();
+      console.error(`PDF has ${totalPages} pages (split threshold: ${splitThreshold})`);
+
+      if (totalPages > splitThreshold) {
+        // Split PDF and process each chunk
+        console.error(`Splitting PDF into chunks of max ${splitThreshold} pages...`);
+        const chunks = await splitPdf(pdfBytes, splitThreshold);
+        console.error(`Processing ${chunks.length} chunk(s)...`);
+
+        const results: Array<{ result: OcrResult; metadata: ChunkMetadata }> = [];
+
+        for (let i = 0; i < chunks.length; i++) {
+          const chunk = chunks[i];
+          console.error(`  Processing chunk ${i + 1}/${chunks.length} (pages ${chunk.startPage}-${chunk.endPage})...`);
+
+          const result = await callOcrApi(chunk.chunk, ocrOptions);
+          results.push({
+            result,
+            metadata: { startPage: chunk.startPage, endPage: chunk.endPage },
+          });
+        }
+
+        // Merge results from all chunks
+        console.error(`Merging results from ${chunks.length} chunk(s)...`);
+        mergedResult = mergeOcrResults(results);
+      } else {
+        // Process entire PDF at once
+        const result = await callOcrApi(pdfBytes, ocrOptions);
+        mergedResult = result;
+      }
 
       // Output result
       const outputData =
