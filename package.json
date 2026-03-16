@@ -1,6 +1,6 @@
 {
   "name": "@kafkaliu/nezha-ocr-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI tool to convert PDF to JSON-AST using PaddleOCR API",
   "type": "module",
   "main": "dist/index.js",
